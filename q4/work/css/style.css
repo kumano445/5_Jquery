@@ -52,4 +52,5 @@
 
 .is-hidden {
   display: none;
+  /* ページA~Eを全て隠す役割を持っている。 */
 }
