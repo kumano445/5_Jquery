@@ -4,7 +4,7 @@ $(function() {
     var pageCount = 1;
 
     var settings = {
-      url: `https://ci.nii.ac.jp/books/opensearch/search?title=${searchWord}&format=json&p=${pageCount}&count=20`,
+      url: `https://ci.nii.ac.jp/books/opensearch/search?title=${encodeURIComponent(searchWord)}&format=json&p=${pageCount}&count=20`,
       method: "GET",
     };
 
@@ -12,40 +12,26 @@ $(function() {
 
     $.ajax(settings)
       .done(function(response) {
-        if (books.length > 0) {
-  $.each(books, function(index, book) {
-    var title = book["dc:title"] ? book["dc:title"] : "不明";
-    var author = book["dc:creator"] ? book["dc:creator"] : "不明";
-    var publisher = book["dc:publisher"] ? book["dc:publisher"] : "不明";
-
-    var listItem = $("<li>").text(`タイトル: ${title}, 作者: ${author}, 出版社: ${publisher}`);
-    $(".lists").append(listItem);
-  });
-} else {
-  $(".lists").empty();
-  $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
-}
         // 検索成功時の処理
         $(".lists").empty(); // 検索結果を初期化
 
         if (response["@graph"]) {
-          // @graphは、JSON-LD形式でデータが表現されている場合に使用されるキーワード。
           var books = response["@graph"];
 
           if (books.length > 0) {
             $.each(books, function(index, book) {
-              var title = book["dc:title"] ? book["dc:title"] : "不明";
-              var author = book["dc:creator"] ? book["dc:creator"] : "不明";
-              var publisher = book["dc:publisher"] ? book["dc:publisher"] : "不明";
-          
+              var title = book["dc:title"] ? book["dc:title"][0] : "不明";
+              var author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
+              var publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
+
               var listItem = $("<li>").text(`タイトル: ${title}, 作者: ${author}, 出版社: ${publisher}`);
               $(".lists").append(listItem);
             });
+
           } else {
-            $(".lists").empty();
             $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
           }
-        } 
+        }
       })
       .fail(function(err) {
         // 検索失敗時の処理
