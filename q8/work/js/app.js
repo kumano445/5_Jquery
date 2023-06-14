@@ -15,22 +15,22 @@ $(function() {
         // 検索成功時の処理
         $(".lists").empty(); // 検索結果を初期化
 
-        if (response["@graph"]) {
-          var books = response["@graph"];
+        if (response["@graph"] && response["@graph"]["item"]) {
+          var books = response["@graph"]["item"];
 
           if (books.length > 0) {
+
             $.each(books, function(index, book) {
               var title = book["dc:title"] ? book["dc:title"][0] : "不明";
               var author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
               var publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
-
-              var listItem = $("<li>").text(`タイトル: ${title}, 作者: ${author}, 出版社: ${publisher}`);
-              $(".lists").append(listItem);
+            
+              var listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "タイトル不明：") + '</p><p>作者：' + (author ? author : "作者不明") + '</p><p>出版社：' + (publisher ? publisher : "出版社不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">詳細を表示</a></div></li>');
+              $(".lists").prepend(listItemHTML);
             });
-
-          } else {
-            $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
-          }
+          } 
+        } else {
+          $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
         }
       })
       .fail(function(err) {
@@ -45,6 +45,7 @@ $(function() {
     $("#search-input").val(""); // 検索ワードをクリア
   });
 });
+
 
 // 変数settingsに設定情報などを格納
 // const settings = {
