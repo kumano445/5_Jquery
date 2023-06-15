@@ -3,7 +3,7 @@ $(function(){
     // .drawer_buttonをクリックすると
     $(this).toggleClass("active");
     // .toggleClass()は、要素に「指定のクラスがあれば削除して、無ければ付ける」事ができるメソッド。そのためthisである.drawer_button"をクリックすると.drawer_button"にクラス名active"が付与される。
-    $(".draw_bg").fadeToggle();
+    $(".drawer_bg").fadeToggle();
     // fadeToggleはフェードイン、フェードアウトを交互に行うメソッド。上記のボタンをクリックすることで表示されたりされなかったりする。
     $("nav").toggleClass("open")
     // .drawer_buttonをクリックするとnavにクラス名openが付与。

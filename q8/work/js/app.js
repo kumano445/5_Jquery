@@ -20,7 +20,6 @@ $(function() {
           console.log(books);
 
           if (books.length > 0) {
-
             $.each(books, function(index, book) {
               var title = book["dc:title"] ? book["dc:title"][0] : "不明";
               var author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
@@ -46,7 +45,6 @@ $(function() {
     $("#search-input").val(""); // 検索ワードをクリア
   });
 });
-
 
 // 変数settingsに設定情報などを格納
 // const settings = {
