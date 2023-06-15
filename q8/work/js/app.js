@@ -12,11 +12,12 @@ $(function() {
 
     $.ajax(settings)
       .done(function(response) {
+        console.log(response)
         // 検索成功時の処理
         $(".lists").empty(); // 検索結果を初期化
-
-        if (response["@graph"] && response["@graph"]["item"]) {
-          var books = response["@graph"]["item"];
+        if (response["@graph"] && response["@graph"][0]["items"]) {
+          var books = response["@graph"][0]["items"];
+          console.log(books);
 
           if (books.length > 0) {
 
