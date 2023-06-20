@@ -18,7 +18,7 @@ $(function() {
         if (response["@graph"] && response["@graph"][0]["items"]) {
           var books = response["@graph"][0]["items"];
           console.log(books);
-
+var title = book["title"] ? book["title"][0] : "不明";
           if (books.length > 0) {
             $.each(books, function(index, book) {
               var title = book["dc:title"] ? book["dc:title"][0] : "不明";
