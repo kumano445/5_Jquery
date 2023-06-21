@@ -20,7 +20,7 @@ $(function() {
   });
 
   $("#q5").on("click", function() {
-    // id="q6"のボタンをクリックすると下記の動作をする。
+    // id="q5"のボタンをクリックすると下記の動作をする。
     $(this)
       .prepend("DOMの中の前")
       .append("DOMの中の後")
