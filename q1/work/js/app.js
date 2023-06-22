@@ -68,7 +68,7 @@ $(function() {
 
   $("#q10 li").on("click", function() {
     // id="10 li"のボタンをクリックすると下記の動作をする。
-    var indexClicked = $(this).index();
+    const indexClicked = $(this).index();
     // varは変数を宣言し、$(this).index();を代入している。
     // thisはidを取得しているので、q10 liのにことになる。index() は特定の要素のインデックス番号を取得することができるメソッド。複数の要素に対してインデックス番号に応じて処理を分岐させたい場合に使います。
     console.log($("#q11 li").eq(indexClicked));

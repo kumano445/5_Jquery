@@ -1,7 +1,7 @@
 $(function(){
   $(".nav li").click(function(){
     // .nav liに対応するボタンをクリックすると、
-    var clickedIndex = $(".nav li").index(this);
+    const clickedIndex = $(".nav li").index(this);
     // 変数を宣言、代入。引数にthisを指定し、クリックした順番を変数に格納。
     $(".description li").addClass("is-hidden");
     // .description liのボタンを押すとクラス名is-hiddenが付与。
