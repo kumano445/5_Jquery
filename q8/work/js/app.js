@@ -1,9 +1,9 @@
 $(function() {
   $(".search-btn").on("click", function(){
-    var searchWord = $("#search-input").val();
-    var pageCount = 1;
+    const searchWord = $("#search-input").val();
+    const pageCount = 1;
 
-    var settings = {
+    const settings = {
       url: `https://ci.nii.ac.jp/books/opensearch/search?title=${encodeURIComponent(searchWord)}&format=json&p=${pageCount}&count=20`,
       method: "GET",
     };
@@ -16,16 +16,16 @@ $(function() {
         // 検索成功時の処理
         $(".lists").empty(); // 検索結果を初期化
         if (response["@graph"] && response["@graph"][0]["items"]) {
-          var books = response["@graph"][0]["items"];
+          const books = response["@graph"][0]["items"];
           console.log(books);
-var title = book["title"] ? book["title"][0] : "不明";
+          const title = book["title"] ? book["title"][0] : "不明";
           if (books.length > 0) {
             $.each(books, function(index, book) {
-              var title = book["dc:title"] ? book["dc:title"][0] : "不明";
-              var author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
-              var publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
+              const title = book["dc:title"] ? book["dc:title"][0] : "不明";
+              const author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
+              const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
             
-              var listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "タイトル不明：") + '</p><p>作者：' + (author ? author : "作者不明") + '</p><p>出版社：' + (publisher ? publisher : "出版社不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">書籍情報</a></div></li>');
+              const listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "タイトル不明：") + '</p><p>作者：' + (author ? author : "作者不明") + '</p><p>出版社：' + (publisher ? publisher : "出版社不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">書籍情報</a></div></li>');
               $(".lists").prepend(listItemHTML);
             });
           } 
