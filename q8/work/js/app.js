@@ -1,5 +1,5 @@
 $(function() {
-  $(".search-btn").on("click", function(){
+  $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val();
     const pageCount = 1;
 
@@ -9,27 +9,23 @@ $(function() {
     };
 
     $(".message").text(""); // メッセージを初期化
-
     $.ajax(settings)
       .done(function(response) {
-        console.log(response)
+        console.log(response);
         // 検索成功時の処理
         $(".lists").empty(); // 検索結果を初期化
         if (response["@graph"] && response["@graph"][0]["items"]) {
           const books = response["@graph"][0]["items"];
           console.log(books);
-          const title = book["title"] ? book["title"][0] : "不明";
-        if (books.length > 0) {
           $.each(books, function(index, book) {
             const title = book["dc:title"] ? book["dc:title"][0] : "不明";
             const author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
             const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
             const listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "タイトル不明：") + '</p><p>作者：' + (author ? author : "作者不明") + '</p><p>出版社：' + (publisher ? publisher : "出版社不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">書籍情報</a></div></li>');
-        $(".lists").prepend(listItemHTML);
+            $(".lists").prepend(listItemHTML);
           });
-        } 
         } else {
-        $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
+          $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
         }
       })
       .fail(function(err) {
@@ -37,12 +33,14 @@ $(function() {
         $(".message").text("検索結果が見つかりませんでした。別のキーワードで検索してください。");
       });
   });
+
   $(".reset-btn").on("click", function() {
     $(".lists").empty(); // 検索結果を初期化
     $(".message").text(""); // メッセージを初期化
     $("#search-input").val(""); // 検索ワードをクリア
   });
 });
+
 
 // 変数settingsに設定情報などを格納
 // const settings = {
