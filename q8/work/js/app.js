@@ -1,20 +1,26 @@
 $(function() {
-  function handleSearchSuccess(data) {
+  function handleSearchSuccess(response) {
     $(".message").remove();
     $(".lists").empty();
 
-    if (data && data["@graph"] && data["@graph"][0]["items"]) {
-      const books = data["@graph"][0]["items"];
+    if (response && response["@graph"] && response["@graph"][0]["items"]) {
+      const books = response["@graph"][0]["items"];
       $.each(books, function(index, book) {
-        const title = book["dc:title"] ? book["dc:title"][0] : "不明";
-        const author = book["dc:creator"] ? book["dc:creator"][0] : "不明";
+        const title = book.title ? book.title : "不明";
+        const author = book["dc:creator"] ? book["dc:creator"] : "不明";
         const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
-        const listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "タイトル不明") + '</p><p>作者：' + (author ? author : "作者不明") + '</p><p>出版社：' + (publisher ? publisher : "出版社不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">書籍情報</a></div></li>');
+        const listItemHTML = '<li class="lists-item"><div class="list-inner"><p>タイトル：' + (title ? title : "不明") + '</p><p>作者：' + (author ? author : "不明") + '</p><p>出版社：' + (publisher ? publisher : "不明") + '</p><a href="' + (book.link["@id"] + '" target="_blank">書籍情報</a></div></li>');
         $(".lists").prepend(listItemHTML);
       });
     } else {
       $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
     }
+  }
+
+  function handleSearchFailure() {
+    $(".lists").empty();
+    $(".message").remove();
+    $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
   }
 
   $(".search-btn").on("click", function() {
@@ -33,11 +39,7 @@ $(function() {
         }
       })
       .done(handleSearchSuccess)
-      .fail(function() {
-        $(".lists").empty();
-        $(".message").remove();
-        $(".lists").before('<div class="message">通信エラーが発生しました。<br>もう一度やり直してください。</div>');
-      });
+      .fail(handleSearchFailure);
     }
   });
 
