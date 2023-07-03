@@ -34,12 +34,16 @@ $(function() {
         data: {
           title: searchWord,
           format: "json",
-          p: 1,
+          p: 2,
           count: 20
         }
       })
-      .done(handleSearchSuccess)
-      .fail(handleSearchFailure);
+      .done(function(response) {
+        handleSearchSuccess(response);
+      })
+      .fail(function() {
+        handleSearchFailure();
+      });
     }
   });
 
