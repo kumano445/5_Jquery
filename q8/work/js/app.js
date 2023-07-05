@@ -17,33 +17,43 @@ $(function() {
     }
   }
 
-  function handleSearchFailure() {
+  function handleSearchFailure(jqXHR, textStatus, errorThrown)  {
     $(".lists").empty();
     $(".message").remove();
-    $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
+    if (jqXHR.status === 0) {
+      $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続の確認をしてください。</div>');
+    } else {
+      $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
+    }
   }
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val();
+    let pageCount = 1; 
 
     if (searchWord) {
       $(".lists").empty();
+      pageCount++; 
       $.ajax({
         url: "https://ci.nii.ac.jp/books/opensearch/search",
         method: "GET",
         data: {
           title: searchWord,
           format: "json",
-          p: 2,
+          p: 1,
           count: 20
         }
       })
       .done(function(response) {
         handleSearchSuccess(response);
       })
-      .fail(function() {
-        handleSearchFailure();
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        handleSearchFailure(jqXHR, textStatus, errorThrown);
       });
+    } else {
+      $(".lists").empty();
+      $(".message").remove();
+      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
     }
   });
 
