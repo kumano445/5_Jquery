@@ -21,14 +21,17 @@ $(function() {
   }
 
   function handleSearchFailure(jqXHR) {
-    $(".lists").empty();
-    $(".message").remove();
-    if (jqXHR.status === 0) {
-      $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
-    } else {
-      $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
-    }
+  $(".lists").empty();
+  $(".message").remove();
+  if (jqXHR.status === 0) {
+    $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
+  } else if (jqXHR.status === 404) {
+    $(".lists").before('<div class="message">リクエストされたページが見つかりません。</div>');
+  } else {
+    $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
   }
+}
+
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val();
