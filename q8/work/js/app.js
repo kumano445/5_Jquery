@@ -53,7 +53,7 @@ $(function() {
           title: searchWord,
           format: "json",
           p: pageCount,
-          count: 20,
+          count: 20
         }
       })
       .done(function(response) {
@@ -75,4 +75,3 @@ $(function() {
     $("#search-input").val("");
   });
 });
-  
