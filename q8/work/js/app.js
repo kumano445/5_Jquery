@@ -42,7 +42,7 @@ $(function() {
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val();
 
-    if (searchWord.trim() !== ""){
+    if (searchWord.trim() !== "") {
       $(".lists").empty();
       if (searchWord !== searchLog) {
         pageCount = 1;
@@ -66,13 +66,18 @@ $(function() {
         .fail(function(jqXHR) {
           handleSearchFailure(jqXHR);
         });
-      } else {
-        $(".lists").empty();
-        $(".message").remove();
-        $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-        handleSearchFailure({ status: 400 }); // 400エラーを表示するためにhandleSearchFailureを呼び出す
-      }
-    });
+    } else {
+      $(".lists").empty();
+      $(".message").remove();
+      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
+      // 400エラーを示すためのエラーレスポンスを直接生成
+      const errorResponse = {
+        status: 400,
+        statusText: "Bad Request"
+      };
+      handleSearchFailure(errorResponse);
+    }
+  });
 
   $(".reset-btn").on("click", function() {
     $(".lists").empty();
