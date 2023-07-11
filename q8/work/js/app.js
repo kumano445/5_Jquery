@@ -66,12 +66,13 @@ $(function() {
         .fail(function(jqXHR) {
           handleSearchFailure(jqXHR);
         });
-    } else {
-      $(".lists").empty();
-      $(".message").remove();
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-    }
-  });
+      } else {
+        $(".lists").empty();
+        $(".message").remove();
+        $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
+        handleSearchFailure({ status: 400 }); // 400エラーを表示するためにhandleSearchFailureを呼び出す
+      }
+    });
 
   $(".reset-btn").on("click", function() {
     $(".lists").empty();
