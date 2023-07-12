@@ -31,12 +31,12 @@ $(function() {
     if (jqXHR.status === 0) {
       $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
       console.error("HTTP Status:", jqXHR.status);
+    } else if (jqXHR.status === 400) {
+      $(".lists").before('<div class="message">リクエストされたページが見つかりません。</div>');
     } else if (jqXHR.status === 404) {
       $(".lists").before('<div class="message">ページが見つかりません。</div>');
-      console.error("HTTP Status:", jqXHR.status);
     } else {
       $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
-      console.error("HTTP Status:", jqXHR.status);
     }
   }
 
