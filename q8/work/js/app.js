@@ -32,7 +32,8 @@ $(function() {
       $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
       console.error("HTTP Status:", jqXHR.status);
     } else if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">リクエストされたページが見つかりません。</div>');
+      $(".lists").before('<div class="message">リクエストが無効です。</div>');
+      console.error("HTTP Status:", jqXHR.status);
     } else if (jqXHR.status === 404) {
       $(".lists").before('<div class="message">ページが見つかりません。</div>');
     } else {
@@ -70,9 +71,14 @@ $(function() {
     } else {
       $(".lists").empty();
       $(".message").remove();
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
+      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>');
     }
   });
+  // 400番の確認方法：
+  // 検索ワードを空欄にして検索ボタンをクリック。
+  // 画面上に「検索ワードを入力してください。」というエラーメッセージが表示。
+  // デベロッパーツールのコンソールを開き、HTTP Status: 400というログが表示。。
+  
 
   $(".reset-btn").on("click", function() {
     $(".lists").empty();
