@@ -30,12 +30,13 @@ $(function() {
     console.log(jqXHR.status);
     if (jqXHR.status === 0) {
       $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
-    } else if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">リクエストされたページが見つかりません。</div>');
+      console.error("HTTP Status:", jqXHR.status);
     } else if (jqXHR.status === 404) {
       $(".lists").before('<div class="message">ページが見つかりません。</div>');
+      console.error("HTTP Status:", jqXHR.status);
     } else {
       $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
+      console.error("HTTP Status:", jqXHR.status);
     }
   }
 
@@ -50,8 +51,8 @@ $(function() {
         searchLog = searchWord;
       }
       $.ajax({
+        type: "GET",
         url: "https://ci.nii.ac.jp/books/opensearch/search",
-        method: "GET",
         data: {
           title: searchWord,
           format: "json",
@@ -70,12 +71,6 @@ $(function() {
       $(".lists").empty();
       $(".message").remove();
       $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-      // 400エラーを示すためのエラーレスポンスを直接生成
-      const errorResponse = {
-        status: 400,
-        statusText: "Bad Request"
-      };
-      handleSearchFailure(errorResponse);
     }
   });
 
