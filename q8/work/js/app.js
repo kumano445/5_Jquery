@@ -24,7 +24,7 @@ $(function() {
     }
   }
 
-  function handleSearchFailure(jqXHR) {
+  function handleSearchFailure(jqXHR, textStatus, errorThrown) {
     $(".lists").empty();
     $(".message").remove();
     console.log(jqXHR.status);
@@ -61,12 +61,13 @@ $(function() {
           count: 20
         }
       })
-        .done(function(response) {
+        .done(function(response, textStatus, jqXHR) {
           handleSearchSuccess(response);
           pageCount++;
         })
-        .fail(function(jqXHR) {
-          handleSearchFailure(jqXHR);
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          handleSearchFailure(jqXHR, textStatus, errorThrown);
+          console.error("Request failed:", textStatus, errorThrown);
         });
     } else {
       $(".lists").empty();
@@ -77,9 +78,10 @@ $(function() {
 
   // 400番の確認方法：
   // 以下の手順で確認できます。
-  // 1. 検索ワードを空欄にして検索ボタンをクリックします。
-  // 2. 画面上に「リクエストが無効です。」というエラーメッセージが表示されます。
-  // 3. デベロッパーツールのコンソールに「HTTP Status: 400」というログが表示されます。
+  // 1. 検索ワードを空欄にして検索ボタンをクリック。
+  // 2. 画面上に「正常に通信できませんでした。<br>インターネットの接続の確認をしてください。」というエラーメッセージが表示。
+  // 3. デベロッパーツールのネットワークタブを開く。
+  // 4. ネットワークタブのステータスに「400」が表示。
 
   $(".reset-btn").on("click", function() {
     $(".lists").empty();
