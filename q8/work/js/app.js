@@ -1,3 +1,10 @@
+// 400番の確認方法：
+  // 以下の手順で確認できます。
+  // 1. 検索ワードを空欄にして検索ボタンをクリック。
+  // 2. 画面上に「正常に通信できませんでした。<br>インターネットの接続の確認をしてください。」というエラーメッセージが表示。
+  // 3. デベロッパーツールのコンソールを開く。
+  // 4. コンソールに「400」が表示。
+
 $(function() {
   let searchLog = ""; // ひとつ前の検索ワードを保持する変数
   let pageCount = 1; // ページカウントの初期値を設定
@@ -29,10 +36,7 @@ $(function() {
     $(".message").remove();
     console.log(jqXHR.status);
     if (jqXHR.status === 0) {
-      $(".lists").before('<div class="message">正常に通信できませんでした。インターネットの接続を確認してください。</div>');
-      console.error("HTTP Status:", jqXHR.status);
-    } else if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">リクエストが無効です。</div>');
+      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続を確認してください。</div>');
       console.error("HTTP Status:", jqXHR.status);
     } else if (jqXHR.status === 404) {
       $(".lists").before('<div class="message">ページが見つかりません。</div>');
@@ -72,16 +76,10 @@ $(function() {
     } else {
       $(".lists").empty();
       $(".message").remove();
-      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>');
+      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続を確認してください。</div>');
+      console.error("400");
     }
   });
-
-  // 400番の確認方法：
-  // 以下の手順で確認できます。
-  // 1. 検索ワードを空欄にして検索ボタンをクリック。
-  // 2. 画面上に「正常に通信できませんでした。<br>インターネットの接続の確認をしてください。」というエラーメッセージが表示。
-  // 3. デベロッパーツールのネットワークタブを開く。
-  // 4. ネットワークタブのステータスに「400」が表示。
 
   $(".reset-btn").on("click", function() {
     $(".lists").empty();
@@ -92,3 +90,4 @@ $(function() {
     previousResults = [];
   });
 });
+
