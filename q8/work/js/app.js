@@ -1,10 +1,3 @@
-// 400番の確認方法：
-  // 以下の手順で確認できます。
-  // 1. 検索ワードを空欄にして検索ボタンをクリック。
-  // 2. 画面上に「正常に通信できませんでした。インターネットの接続の確認をしてください。」というエラーメッセージが表示。
-  // 3. デベロッパーツールのインターネットを開く。
-  // 4. ステータスにに「400」が表示が確認。
-
 $(function() {
   let searchLog = ""; // ひとつ前の検索ワードを保持する変数
   let pageCount = 1; // ページカウントの初期値を設定
@@ -18,8 +11,8 @@ $(function() {
       const books = response["@graph"][0].items;
       previousResults = previousResults.concat(books); // 過去の検索結果に新しい結果を追加
       const displayedResults = previousResults.slice(0, pageCount * 20); // 表示する結果数を調整
-
-      $.each(displayedResults, function(index, book) {
+      // displayedResults,
+      $.each(displayedResults,function(index, book) {
         const title = book.title ? book.title : "不明";
         const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";
         const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
@@ -31,24 +24,25 @@ $(function() {
     }
   }
 
-  function handleSearchFailure(jqXHR, textStatus, errorThrown) {
+  function handleSearchFailure(jqXHR) {
     $(".lists").empty();
     $(".message").remove();
     console.log(jqXHR.status);
-    if (jqXHR.status === 0) {
-      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続を確認してください。</div>');
+    if (jqXHR.status === 400) {
+      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
       console.error("HTTP Status:", jqXHR.status);
-    } else if (jqXHR.status === 404) {
-      $(".lists").before('<div class="message">ページが見つかりません。</div>');
-    } else {
-      $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
+    // } else if (jqXHR.status === 404) {
+      // $(".lists").before('<div class="message">ページが見つかりません。</div>');
+    // } 
+    // else {
+      // $(".lists").before('<div class="message">ネットワークエラーが発生しました。再度試してください。</div>');
     }
   }
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val();
-
-    if (searchWord.trim() !== "") {
+    {
+    if (searchWord.trim() !== "") 
       $(".lists").empty();
       if (searchWord !== searchLog) {
         pageCount = 1;
@@ -65,19 +59,19 @@ $(function() {
           count: 20
         }
       })
-        .done(function(response, textStatus, jqXHR) {
+        .done(function(response) {
           handleSearchSuccess(response);
           pageCount++;
         })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          handleSearchFailure(jqXHR, textStatus, errorThrown);
-          console.error("Request failed:", textStatus, errorThrown);
+        .fail(function(jqXHR) {
+          handleSearchFailure(jqXHR);
+          console.error("Request failed:400");
         });
-    } else {
-      $(".lists").empty();
-      $(".message").remove();
-      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続を確認してください。</div>');
-      console.error("400");
+    // } else {
+      // $(".lists").empty();
+      // $(".message").remove();
+      // $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続を確認してください。</div>');
+      // console.error("400");
     }
   });
 
@@ -91,3 +85,5 @@ $(function() {
   });
 });
 
+
+// textStatus, errorThrownいらない
