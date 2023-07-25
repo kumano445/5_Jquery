@@ -20,11 +20,11 @@ $(function() {
   function handleSearchFailure(jqXHR) {
     $(".lists").empty();
     $(".message").remove();
-    if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-      console.error("HTTP Status:", jqXHR.status);
-    } else {
+    if (jqXHR.status === 0) {
       $(".lists").before('<div class="message">予期せぬエラーが発生しました。再度試してください。</div>');
+    } else {
+      $(".lists").before(`<div class="message">HTTP Status: ${jqXHR.status}</div>`);
+      console.error("HTTP Status:", jqXHR.status);
     }
   }
 
@@ -41,14 +41,6 @@ $(function() {
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val().trim();
-    if (searchWord === "") {
-      $(".lists").empty();
-      $(".message").remove();
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-      console.error("HTTP Status: 400");
-      return;
-    }
-
     if (searchWord !== searchLog) {
       pageCount = 1;
       searchLog = searchWord;
