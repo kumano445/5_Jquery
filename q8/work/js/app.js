@@ -1,7 +1,7 @@
 $(function() {
   let searchLog = "";
   let pageCount = 1;
-  let displayedResults = [];
+  //let displayedResults = [];
 
   function handleSearchFailure(jqXHR) {
     $(".lists").empty();
@@ -30,19 +30,19 @@ $(function() {
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val().trim();
-    if (searchWord === "") {
-      // 検索ワードが未入力の場合、処理を中断してメッセージを表示
-      $(".lists").empty();
-      $(".message").remove();
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
-      console.error("HTTP Status: 400");
-      return;
-    }
+    // if (searchWord === "") {
+    //   // 検索ワードが未入力の場合、処理を中断してメッセージを表示
+    //   $(".lists").empty();
+    //   $(".message").remove();
+    //   $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
+    //   console.error("HTTP Status: 400");
+    //   return;
+    // }
 
     if (searchWord !== searchLog) {
       pageCount = 1;
       searchLog = searchWord;
-      displayedResults = [];
+      //displayedResults = [];
     }
 
     $.ajax({
@@ -52,17 +52,32 @@ $(function() {
         title: searchWord,
         format: "json",
         p: pageCount,
-        count: 20
+        count: 20,
       }
     }).done(function(response) {
+
+
+      //console.log(response); //ここのコメント解除して生のresponseを改めて観察してみましょう！！
+
+
+      const data = response["@graph"][0];
+        //公式API読むとresponse["@graph"][0]が本体なのでここでconstに入れときます
+
       $(".message").remove();
-      if (response && response["@graph"] && response["@graph"][0].items) {
-        const books = response["@graph"][0].items;
-        displayedResults = displayedResults.concat(books);
-        displayResults(displayedResults);
-        const totalResults = displayedResults.length;
-        console.log("表示件数:", displayedResults.length, "件");
-        console.log("総件数:", totalResults, "件");
+
+      //if (response && response["@graph"] && response["@graph"][0].items) {  //↓にしましょう
+      if (data["opensearch:totalResults"] !== 0) { //成功してるので中身がカラかだけ見ます
+
+        //const books = response["@graph"][0].items; //上でdataに置き換えたのでなくてもOKです！
+        //displayedResults = displayedResults.concat(books);
+        //displayResults(books);
+        //const totalResults = displayedResults.length;
+        //console.log("表示件数:", displayedResults.length, "件");
+        //console.log("総件数:", totalResults.length, "件");
+
+        displayResults(data.items);
+        console.log("表示件数:", data["opensearch:itemsPerPage"], "件"); //表示件数もapiが答えてくれます,なんか「ded」と調べたら総件数46だったので6になるとこ見れます
+        console.log("総件数:",data["opensearch:totalResults"], "件");    //総件数もapiが答えてくれます
       } else {
         $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
       }
@@ -70,7 +85,7 @@ $(function() {
     }).fail(function(jqXHR) {
       handleSearchFailure(jqXHR);
       console.error("Request failed:", jqXHR.status);
-    });
+    })
   });
 
   $(".reset-btn").on("click", function() {
@@ -79,6 +94,6 @@ $(function() {
     $("#search-input").val("");
     searchLog = "";
     pageCount = 1;
-    displayedResults = [];
+    //displayedResults = [];
   });
 });
