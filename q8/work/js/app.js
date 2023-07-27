@@ -57,7 +57,7 @@ $(function() {
     }).done(function(response) {
 
 
-      //console.log(response); //ここのコメント解除して生のresponseを改めて観察してみましょう！！
+      //console.log(response); 
 
 
       const data = response["@graph"][0];
@@ -76,8 +76,8 @@ $(function() {
         //console.log("総件数:", totalResults.length, "件");
 
         displayResults(data.items);
-        console.log("表示件数:", data["opensearch:itemsPerPage"], "件"); //表示件数もapiが答えてくれます,なんか「ded」と調べたら総件数46だったので6になるとこ見れます
-        console.log("総件数:",data["opensearch:totalResults"], "件");    //総件数もapiが答えてくれます
+        // console.log("表示件数:", data["opensearch:itemsPerPage"], "件"); 
+        // console.log("総件数:",data["opensearch:totalResults"], "件");  
       } else {
         $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
       }
