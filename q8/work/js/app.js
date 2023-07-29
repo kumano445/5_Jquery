@@ -30,13 +30,10 @@ $(function() {
   function success(response) {
     const data = response["@graph"][0];
     $(".message").remove();
-    console.log(response);
     if (data["opensearch:totalResults"] !== 0) {
-      const currentPageItems = data.items.slice(0, pageCount * 20); // 最新の20件を取得
-      displayedResults = displayedResults.concat(currentPageItems); // 新しい結果を表示配列に追加
-      displayResults(displayedResults); // すべての結果を表示
-      console.log("表示件数:", displayedResults.length, "件");
-      console.log("総件数:", data["opensearch:totalResults"], "件");
+      const currentPageItems = data.items.slice(0, pageCount * 20); 
+      displayedResults = displayedResults.concat(currentPageItems);
+      displayResults(displayedResults);
       pageCount++;
     } else {
       $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
@@ -45,7 +42,6 @@ $(function() {
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val().trim();
-
     if (searchWord !== searchLog) {
       pageCount = 1;
       searchLog = searchWord;
