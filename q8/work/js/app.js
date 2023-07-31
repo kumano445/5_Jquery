@@ -8,7 +8,6 @@ $(function() {
     if (jqXHR.status === 0) {
       $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
     } else if (jqXHR.status === 400) {
-      console.error("HTTP Status:", jqXHR.status);
       $(".lists").before('<div class="message">サーバーエラーです</div>');
     } else {
       $(".lists").before('<div class="message">予期せぬエラーが発生しました。再度試してください。</div>');
@@ -28,7 +27,6 @@ $(function() {
   function success(response) {
     const data = response["@graph"][0];
     $(".message").remove();
-    console.log(response);
     if (data["opensearch:totalResults"] !== 0) {
       const currentPageItems = data.items.slice(0, pageCount * 20); 
       displayResults(currentPageItems); 
