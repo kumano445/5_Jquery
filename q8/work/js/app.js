@@ -1,7 +1,6 @@
 $(function() {
   let searchLog = "";
   let pageCount = 1;
-  let displayedResults = []; 
 
   function handleSearchFailure(jqXHR) {
     $(".lists").empty();
@@ -31,9 +30,8 @@ $(function() {
     const data = response["@graph"][0];
     $(".message").remove();
     if (data["opensearch:totalResults"] !== 0) {
-      const currentPageItems = data.items.slice(0, pageCount * 20); 
-      displayedResults = displayedResults.concat(currentPageItems);
-      displayResults(displayedResults);
+      const currentPageItems = data.items.slice((pageCount - 1) * 20, pageCount * 20);
+      displayResults(currentPageItems);
       pageCount++;
     } else {
       $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
@@ -54,7 +52,7 @@ $(function() {
         title: searchWord,
         format: "json",
         p: pageCount,
-        count: 20
+        count: pageCount * 20 // ページ数を2倍にして取得
       }
     })
       .done(function(response) {
