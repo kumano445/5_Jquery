@@ -5,11 +5,11 @@ $(function() {
   function handleSearchFailure(jqXHR) {
     $(".lists").empty();
     $(".message").remove();
-
     if (jqXHR.status === 0) {
       $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
     } else if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">エラー：サーバーに接続できません。</div>');
+      console.error("HTTP Status:", jqXHR.status);
+      $(".lists").before('<div class="message">サーバーエラーです</div>');
     } else {
       $(".lists").before('<div class="message">予期せぬエラーが発生しました。再度試してください。</div>');
     }
@@ -25,18 +25,19 @@ $(function() {
       $(".lists").prepend(listItemHTML);
     });
   }
-
   function success(response) {
     const data = response["@graph"][0];
     $(".message").remove();
+    console.log(response);
     if (data["opensearch:totalResults"] !== 0) {
-      const currentPageItems = data.items.slice((pageCount - 1) * 20, pageCount * 20);
-      displayResults(currentPageItems);
+      const currentPageItems = data.items.slice(0, pageCount * 20); 
+      displayResults(currentPageItems); 
       pageCount++;
     } else {
       $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
     }
   }
+  
 
   $(".search-btn").on("click", function() {
     const searchWord = $("#search-input").val().trim();
@@ -52,15 +53,13 @@ $(function() {
         title: searchWord,
         format: "json",
         p: pageCount,
-        count: pageCount * 20 // ページ数を2倍にして取得
+        count: 20,
       }
+    }).done(function(response) {
+      success(response);
+    }).fail(function(jqXHR) {
+      handleSearchFailure(jqXHR);
     })
-      .done(function(response) {
-        success(response);
-      })
-      .fail(function(jqXHR) {
-        handleSearchFailure(jqXHR);
-      });
   });
 
   $(".reset-btn").on("click", function() {
