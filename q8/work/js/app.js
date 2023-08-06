@@ -16,17 +16,6 @@ $(function() {
     }
   }
 
-  // 検索結果を表示する関数
-  function displayResults(results) {
-    $.each(results, function(index, book) {
-      const title = book.title ? book.title : "不明";// タイトルがあれば表示、なければ"不明"を表示
-      const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";// 作者があれば表示、なければ"作者不明"を表示
-      const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";// 出版社があれば表示、なければ"不明"を表示
-      const listItemHTML = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${author}</p><p>出版社：${publisher}</p><a href="${book.link["@id"]}" target="_blank">書籍情報</a></div></li>`;// 書籍情報をHTMLとして構築
-      $(".lists").prepend(listItemHTML);// 書籍情報を表示領域に追加
-    });
-  }
-
   // 検索成功時の処理を行う関数
   function success(response) {
     const data = response["@graph"][0];
@@ -55,7 +44,6 @@ $(function() {
     if (searchWord !== searchLog) {
       currentPage = 1;
       searchLog = searchWord;
-      $(".lists").empty(); // 検索結果表示エリアをクリア
     }
 
     // 検索実行
