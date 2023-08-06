@@ -8,22 +8,22 @@ $(function() {
     $(".message").remove(); // メッセージエリアをクリア
 
     if (jqXHR.status === 0) {
-      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');
+      $(".lists").before('<div class="message">検索ワードを入力してください。</div>');// 検索ワードが未入力の場合のエラーメッセージ
     } else if (jqXHR.status === 400) {
-      $(".lists").before('<div class="message">エラー：サーバーに接続できません。</div>');
+      $(".lists").before('<div class="message">エラー：サーバーに接続できません。</div>');// サーバーへの接続エラーの場合のエラーメッセー
     } else {
-      $(".lists").before('<div class="message">予期せぬエラーが発生しました。再度試してください。</div>');
+      $(".lists").before('<div class="message">予期せぬエラーが発生しました。再度試してください。</div>'); // その他のエラーの場合のエラーメッセージ
     }
   }
 
   // 検索結果を表示する関数
   function displayResults(results) {
     $.each(results, function(index, book) {
-      const title = book.title ? book.title : "不明";
-      const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";
-      const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
-      const listItemHTML = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${author}</p><p>出版社：${publisher}</p><a href="${book.link["@id"]}" target="_blank">書籍情報</a></div></li>`;
-      $(".lists").prepend(listItemHTML);
+      const title = book.title ? book.title : "不明";// タイトルがあれば表示、なければ"不明"を表示
+      const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";// 作者があれば表示、なければ"作者不明"を表示
+      const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";// 出版社があれば表示、なければ"不明"を表示
+      const listItemHTML = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${author}</p><p>出版社：${publisher}</p><a href="${book.link["@id"]}" target="_blank">書籍情報</a></div></li>`;// 書籍情報をHTMLとして構築
+      $(".lists").prepend(listItemHTML);// 書籍情報を表示領域に追加
     });
   }
 
