@@ -1,6 +1,7 @@
 $(function() {
   let searchLog = ""; // 検索ワードの履歴を保存する変数
   let currentPage = 1; // 現在表示中のページ番号を保存する変数
+  const itemsPerPage = 20; // 1ページあたりの件数
 
   // 検索エラー処理を行う関数
   function handleSearchFailure(jqXHR) {
@@ -44,6 +45,7 @@ $(function() {
     if (searchWord !== searchLog) {
       currentPage = 1;
       searchLog = searchWord;
+      $(".lists").empty(); // 検索結果表示エリアをクリア
     }
 
     // 検索実行
@@ -53,7 +55,9 @@ $(function() {
       data: {
         title: searchWord,
         format: "json",
+        count: itemsPerPage, // count パラメーターを追加
         p: currentPage,
+        
       }
     })
       .done(function(response) {
