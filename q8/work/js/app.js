@@ -23,16 +23,23 @@ $(function() {
 
     if (data["opensearch:totalResults"] != 0) {
       $(".message").remove(); // 検索結果がある場合、メッセージを削除
-      data.items.map((book) => {
-        // 書籍情報の取得と表示
-        const title = book.title ? book.title : "不明";
-        const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";
-        const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
-        const listItemHTML = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${author}</p><p>出版社：${publisher}</p><a href="${book.link["@id"]}" target="_blank">書籍情報</a></div></li>`;
-        $(".lists").prepend(listItemHTML);
-      });
-      currentPage++; 
+      if (data.items) {
+        data.items.map((book) => {
+          // 書籍情報の取得と表示
+          const title = book.title ? book.title : "不明";
+          const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";
+          const publisher = book["dc:publisher"] ? book["dc:publisher"][0] : "不明";
+          const listItemHTML = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${author}</p><p>出版社：${publisher}</p><a href="${book.link["@id"]}" target="_blank">書籍情報</a></div></li>`;
+          $(".lists").prepend(listItemHTML);
+        });
+        currentPage++;
+      } else {
+        $(".message").remove(); // 既存のメッセージを削除
+        $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
+      }
     } else {
+      $(".message").remove(); // 既存のメッセージを削除
+      $(".lists").empty(); // 検索結果表示エリアをクリア
       $(".lists").before('<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>');
     }
   }
