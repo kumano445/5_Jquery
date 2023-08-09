@@ -24,7 +24,7 @@ $(function() {
     if (data["opensearch:totalResults"] != 0) {
       $(".message").remove(); // 検索結果がある場合、メッセージを削除
       if (data.items) {
-        data.items.map((book) => {
+        data.items.forEach((book) => {
           // 書籍情報の取得と表示
           const title = book.title ? book.title : "不明";
           const author = book["dc:creator"] ? book["dc:creator"] : "作者不明";
